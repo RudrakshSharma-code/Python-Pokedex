@@ -35,8 +35,8 @@ class Request:
         - output: This is the output text file to which we print the results
         of the request
         - result: Placeholder value to hold the result of the request. This does
-        not come in with the request, but rather is replaced by json and pokedex
-        objects at various points in the handling of the request
+        not come in with the request, but rather is replaced pokedex objects at
+        some point in the handling of the request.
 
     """
     def __init__(self):
