@@ -219,11 +219,12 @@ class OutputHandler(BaseRequestHandler):
     Currently prints out the name of each pokedex object
     for each result to console or to the output file.
     """
+
     def handle_request(self, req: Request) -> (str, bool):
         if req.output == "print":
             print()
             for result in req.result:
-                print(result.name)
+                print(result)
         else:
             with open(req.output, mode="w") as output_file:
                 for result in req.result:
@@ -244,4 +245,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

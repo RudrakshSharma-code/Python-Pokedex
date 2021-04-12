@@ -1,9 +1,18 @@
 """
 This module houses the functions that get json data from an endpoint.
 """
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ContentTypeError
 import asyncio
 from pokedex import Request
+
+
+class InvalidEntry(Exception):
+    def __init__(self, entry: str):
+        super().__init__()
+        self.entry = entry
+
+    def __str__(self):
+        return f"Invalid Entry: " + "{self.entry}"
 
 
 async def get_pokedex_object_data(id_: str, url: str, session: ClientSession) -> dict:
@@ -17,7 +26,7 @@ async def get_pokedex_object_data(id_: str, url: str, session: ClientSession) ->
     :return: a dict, json representation of response.
     """
     target_url = url + id_
-    response = await session.request(method="GET", url=target_url)
+    response = await session.request(method="GET", url=target_url.lower())
     # print("Response object from aiohttp:\n", response)
     # print("Response object type:\n", type(response))
     # print("-----")
@@ -33,7 +42,7 @@ async def process_request(request: Request) -> list:
     """
     url = f"https://pokeapi.co/api/v2/{request.mode.value}/"
     async with ClientSession() as session:
-        list_tasks = [asyncio.create_task(get_pokedex_object_data(id_, url, session))
+        list_tasks = [asyncio.create_task(get_pokedex_object_data(id_, url.lower(), session))
                       for id_ in request.input_data]
         responses = await asyncio.gather(*list_tasks)
         return list(responses)
