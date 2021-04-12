@@ -42,7 +42,7 @@ async def process_request(request: Request) -> list:
     """
     url = f"https://pokeapi.co/api/v2/{request.mode.value}/"
     async with ClientSession() as session:
-        list_tasks = [asyncio.create_task(get_pokedex_object_data(id_, url.lower(), session))
+        list_tasks = [asyncio.create_task(get_pokedex_object_data(id_, url, session))
                       for id_ in request.input_data]
         responses = await asyncio.gather(*list_tasks)
         return list(responses)

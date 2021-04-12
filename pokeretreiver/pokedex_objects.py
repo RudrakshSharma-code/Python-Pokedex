@@ -25,15 +25,21 @@ class Pokemon(PokedexObject):
         self.types = types
         self.abilities = abilities
         self.moves = moves
+        is_expanded = False
 
     def __str__(self):
-        return f'\nPokemon: {self.name.capitalize()} ' \
+        type_list = [types["type"]["name"].title() for types in self.types]
+        stat_list = [stat["stat"]["name"].title() + ": " +
+                     str(stat["base_stat"]) for stat in self.stats]
+        ability_list = [ability["ability"]["name"].title() for ability in self.abilities]
+
+        return f'Pokemon: {self.name.capitalize()} ' \
                f'\nId: {self.id}' \
                f'\nHeight: {self.height} decimetres' \
-               f'\nWeight: {self.weight} hectograms'
-        # f'\nStats: {self.stats}' \
-        # f'\nTypes: {self.types}' \
-        # f'\nAbilities: {self.abilities}' \
+               f'\nWeight: {self.weight} hectograms' \
+               f"\nTypes: {', '.join(type_list)}" \
+               f"\nStats: {', '.join(stat_list)}" \
+               f"\nAbilities: {', '.join(ability_list)}\n"
 
 
 class Ability(PokedexObject):
@@ -46,17 +52,15 @@ class Ability(PokedexObject):
         self.short_effect = effect_entries[0]["short_effect"]
         self.pokemon = pokemon
 
-    def __str__(self):
+    def __str__(self, pokemon_list=None):
+        pokemon_list = [pokemon["pokemon"]["name"].title() for pokemon in self.pokemon]
+
         return f'\nName: {self.name.capitalize()} ' \
                f'\nId: {self.id}' \
                f'\nGeneration: {self.generation}' \
-               f'\nEffect: {self.effect}'
-        # f'\nEffect: {self.short_effect}' \
-        # f'\nPokemon: {self.pokemon}'
-
-        # f'\nStats: {self.stats}' \
-        # f'\nTypes: {self.types}' \
-        # f'\nAbilities: {self.abilities}' \
+               f'\nEffect: {self.effect}' \
+               f'\nEffect (Short): {self.short_effect}' \
+               f"\nPokemon: {', '.join(pokemon_list)}"
 
 
 class Move(PokedexObject):
@@ -87,6 +91,11 @@ class Stat(PokedexObject):
     def __init__(self, is_battle_only: bool, **kwargs):
         super().__init__(**kwargs)
         self.is_battle_only = is_battle_only
+
+    def __str__(self):
+        return f'\nName: {self.name.capitalize()} ' \
+                f'\nId: {self.id}' \
+                f'\nIs Battle Only: {self.is_battle_only}'
 
 
 class PokedexObjectFactory(ABC):
