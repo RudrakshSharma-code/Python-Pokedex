@@ -1,0 +1,32 @@
+Pokemon: Pikachu 
+Id: 25
+Height: 4 decimetres
+Weight: 60 hectograms
+Types: Electric
+Stats: Hp = 35, Attack = 55, Defense = 40, Special-Attack = 50, Special-Defense = 50, Speed = 90
+Abilities: Static, Lightning-Rod
+
+Pokemon: Bellsprout 
+Id: 69
+Height: 7 decimetres
+Weight: 40 hectograms
+Types: Grass, Poison
+Stats: Hp = 50, Attack = 75, Defense = 35, Special-Attack = 70, Special-Defense = 30, Speed = 40
+Abilities: Chlorophyll, Gluttony
+
+Pokemon: Jigglypuff 
+Id: 39
+Height: 5 decimetres
+Weight: 55 hectograms
+Types: Normal, Fairy
+Stats: Hp = 115, Attack = 45, Defense = 20, Special-Attack = 45, Special-Defense = 25, Speed = 20
+Abilities: Cute-Charm, Competitive, Friend-Guard
+
+Pokemon: Cherubi 
+Id: 420
+Height: 4 decimetres
+Weight: 33 hectograms
+Types: Grass
+Stats: Hp = 45, Attack = 35, Defense = 45, Special-Attack = 62, Special-Defense = 53, Speed = 35
+Abilities: Chlorophyll
+

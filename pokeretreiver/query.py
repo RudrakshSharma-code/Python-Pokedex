@@ -27,11 +27,13 @@ async def get_pokedex_object_data(id_: str, url: str, session: ClientSession) ->
     """
     target_url = url + id_
     response = await session.request(method="GET", url=target_url.lower())
-    # print("Response object from aiohttp:\n", response)
-    # print("Response object type:\n", type(response))
-    # print("-----")
-    json_dict = await response.json()
-    return json_dict
+
+    if "200" in str(response.status):
+        json_dict = await response.json()
+        return json_dict
+
+    # elif "404" in str(response.status):
+    #     do something
 
 
 async def process_request(request: Request) -> list:

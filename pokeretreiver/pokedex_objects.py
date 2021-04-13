@@ -29,7 +29,7 @@ class Pokemon(PokedexObject):
 
     def __str__(self):
         type_list = [types["type"]["name"].title() for types in self.types]
-        stat_list = [stat["stat"]["name"].title() + ": " +
+        stat_list = [stat["stat"]["name"].title() + " = " +
                      str(stat["base_stat"]) for stat in self.stats]
         ability_list = [ability["ability"]["name"].title() for ability in self.abilities]
 
@@ -48,8 +48,8 @@ class Ability(PokedexObject):
                  pokemon: list, **kwargs):
         super().__init__(**kwargs)
         self.generation = generation
-        self.effect = effect_entries[0]["effect"]
-        self.short_effect = effect_entries[0]["short_effect"]
+        self.effect = effect_entries[1]["effect"]
+        self.short_effect = effect_entries[1]["short_effect"]
         self.pokemon = pokemon
 
     def __str__(self, pokemon_list=None):

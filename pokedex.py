@@ -173,6 +173,7 @@ class InputHandler(BaseRequestHandler):
     Reads in and stores data from input file if there is one.
     Formats the request's input data to a list of string ids.
     """
+
     def handle_request(self, req: Request) -> (str, bool):
         # If there is an input file, set input_data
         # in the request to the data from the file.
@@ -223,14 +224,15 @@ class OutputHandler(BaseRequestHandler):
     def handle_request(self, req: Request) -> (str, bool):
         if req.output == "print":
             print()
+            # if req.result is not None:
             for result in req.result:
                 print(result)
-        else:
-            with open(req.output, mode="w") as output_file:
-                for result in req.result:
-                    output_file.write(result.name + "\n")
+        # else:
+        with open(req.output, mode="w") as output_file:
+            for result in req.result:
+                output_file.write(str(result) + "\n")
 
-        # Return the result of the next handler if there is one
+    # Return the result of the next handler if there is one
         if self.next_handler is not None:
             return self.next_handler.handle_request(req)
         else:
