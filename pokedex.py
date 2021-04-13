@@ -206,7 +206,10 @@ class QueryHandler(BaseRequestHandler):
         loop = asyncio.get_event_loop()
         result = loop.run_until_complete(pokeretreiver.query.process_request(req))
         factory = self.pokedex_object_factory_mapper[req.mode]()
-        req.result = [factory.create_object(**info) for info in result]
+        ####################################################################
+        error = "Query did not return a response"
+        req.result = [factory.create_object(**info) if len(info) > 0 else error for info in result]
+        ####################################################################
 
         # Return the result of the next handler if there is one
         if self.next_handler is not None:

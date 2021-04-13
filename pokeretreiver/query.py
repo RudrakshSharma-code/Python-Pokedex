@@ -31,9 +31,10 @@ async def get_pokedex_object_data(id_: str, url: str, session: ClientSession) ->
     if "200" in str(response.status):
         json_dict = await response.json()
         return json_dict
+    elif "404" in str(response.status):
+        json_dict = {}
 
-    # elif "404" in str(response.status):
-    #     do something
+    return json_dict
 
 
 async def process_request(request: Request) -> list:
