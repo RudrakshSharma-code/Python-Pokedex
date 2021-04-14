@@ -5,18 +5,10 @@ pattern for handling requests from the console.
 """
 
 import argparse
-import asyncio
 from abc import ABC, abstractmethod
-from enum import Enum
 import os.path
 import pokeretreiver.query
-import pokeretreiver.pokedex_objects
-
-
-class PokedexMode(Enum):
-    POKEMON = "pokemon"
-    ABILITY = "ability"
-    MOVE = "move"
+# from pokeretreiver.query import QueryMaster, PokedexMode
 
 
 class Request:
@@ -85,7 +77,7 @@ def setup_request_commandline() -> Request:
     try:
         args = parser.parse_args()
         request = Request()
-        request.mode = PokedexMode(args.mode)
+        request.mode = pokeretreiver.query.PokedexMode(args.mode)
         request.input_data = args.inputdata
         request.input_file = args.inputfile
         request.output = args.output
@@ -97,7 +89,7 @@ def setup_request_commandline() -> Request:
         quit()
 
 
-class Pokedex:
+class PokedexRequestController:
 
     def __init__(self):
         file_paths_handler = ValidateFilePathsHandler()
@@ -196,20 +188,10 @@ class QueryHandler(BaseRequestHandler):
     Gets all the json responses for the request, and replaces the request's
     result with a list of pokedex objects correlating to the json responses.
     """
-    pokedex_object_factory_mapper = {
-        PokedexMode.POKEMON: pokeretreiver.pokedex_objects.PokemonFactory,
-        PokedexMode.ABILITY: pokeretreiver.pokedex_objects.AbilityFactory,
-        PokedexMode.MOVE: pokeretreiver.pokedex_objects.MoveFactory
-    }
 
     def handle_request(self, req: Request) -> (str, bool):
-        loop = asyncio.get_event_loop()
-        result = loop.run_until_complete(pokeretreiver.query.process_request(req))
-        factory = self.pokedex_object_factory_mapper[req.mode]()
-        ####################################################################
-        error = "Query did not return a response"
-        req.result = [factory.create_object(**info) if len(info) > 0 else error for info in result]
-        ####################################################################
+
+        req.result = pokeretreiver.query.QueryMaster.execute_request(req)
 
         # Return the result of the next handler if there is one
         if self.next_handler is not None:
@@ -225,17 +207,15 @@ class OutputHandler(BaseRequestHandler):
     """
 
     def handle_request(self, req: Request) -> (str, bool):
-        if req.output == "print":
-            print()
-            # if req.result is not None:
-            for result in req.result:
-                print(result)
-        # else:
-        with open(req.output, mode="w") as output_file:
-            for result in req.result:
-                output_file.write(str(result) + "\n")
+        output = "\n"
+        for result in req.result:
+            output += result.__str__() + "\n"
+        print(output)
+        if req.output != "print":
+            with open(req.output, mode="w", encoding='utf-8') as output_file:
+                output_file.write(output)
 
-    # Return the result of the next handler if there is one
+        # Return the result of the next handler if there is one
         if self.next_handler is not None:
             return self.next_handler.handle_request(req)
         else:
@@ -244,7 +224,7 @@ class OutputHandler(BaseRequestHandler):
 
 def main():
     request = setup_request_commandline()
-    pokedex = Pokedex()
+    pokedex = PokedexRequestController()
     pokedex.execute_request(request)
 
 

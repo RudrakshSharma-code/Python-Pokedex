@@ -17,7 +17,8 @@ class PokedexObject(ABC):
 class Pokemon(PokedexObject):
     def __init__(self, height: int, weight: int,
                  stats: list, types: (list, str),
-                 abilities: list, moves: list, **kwargs):
+                 abilities: list, moves: list,
+                 is_expanded=False, **kwargs):
         super().__init__(**kwargs)
         self.height = height
         self.weight = weight
@@ -25,13 +26,21 @@ class Pokemon(PokedexObject):
         self.types = types
         self.abilities = abilities
         self.moves = moves
-        is_expanded = False
+        self.is_expanded = is_expanded
 
     def __str__(self):
+        if self.is_expanded:
+            stat_list = map(str, self.stats)
+            move_list = map(str, self.moves)
+            ability_list = map(str, self.abilities)
+
+        else:
+            stat_list = [stat["stat"]["name"].title() + " = " +
+                         str(stat["base_stat"]) for stat in self.stats]
+            ability_list = [ability["ability"]["name"].title() for ability in self.abilities]
+            move_list = []
+
         type_list = [types["type"]["name"].title() for types in self.types]
-        stat_list = [stat["stat"]["name"].title() + " = " +
-                     str(stat["base_stat"]) for stat in self.stats]
-        ability_list = [ability["ability"]["name"].title() for ability in self.abilities]
 
         return f'Pokemon: {self.name.capitalize()} ' \
                f'\nId: {self.id}' \
@@ -39,7 +48,8 @@ class Pokemon(PokedexObject):
                f'\nWeight: {self.weight} hectograms' \
                f"\nTypes: {', '.join(type_list)}" \
                f"\nStats: {', '.join(stat_list)}" \
-               f"\nAbilities: {', '.join(ability_list)}\n"
+               f"\nAbilities: {', '.join(ability_list)}"\
+               f"\nMoves: {', '.join(move_list)}\n"
 
 
 class Ability(PokedexObject):
@@ -122,3 +132,5 @@ class MoveFactory(PokedexObjectFactory):
 class StatFactory(PokedexObjectFactory):
     def create_object(self, **kwargs) -> Stat:
         return Stat(**kwargs)
+
+
