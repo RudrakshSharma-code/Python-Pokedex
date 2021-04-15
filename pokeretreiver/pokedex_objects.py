@@ -50,7 +50,7 @@ class Pokemon(PokedexObject):
                f"\nTypes: {', '.join(type_list)}" \
                f"\nStats: {', '.join(stat_list)}" \
                f"\nAbilities: {', '.join(ability_list)}" \
-               f"\nMoves: {', '.join(move_list)}\n"
+               f"\nMoves: {' | '.join(move_list)}"
 
 
 class Ability(PokedexObject):
