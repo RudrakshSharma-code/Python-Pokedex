@@ -31,6 +31,7 @@ class Request:
         some point in the handling of the request.
 
     """
+
     def __init__(self):
         self.mode = None
         self.input_data = None

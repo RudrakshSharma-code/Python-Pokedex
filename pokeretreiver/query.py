@@ -117,19 +117,3 @@ class JsonHelper:
         pokemon.abilities = [ability_factory.create_object(**ability) for ability in abilities]
 
         return pokemon
-
-
-# class InvalidEntry(Exception):
-#     def __init__(self, entry: str):
-#         super().__init__()
-#         self.entry = entry
-#
-#     def __str__(self):
-#         return f"Invalid Entry: " + "{self.entry}"
-
-
-
-
-
-
-
