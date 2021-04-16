@@ -9,6 +9,9 @@ from abc import ABC, abstractmethod
 import os.path
 import pokeretreiver.query
 # from pokeretreiver.query import QueryMaster, PokedexMode
+from datetime import datetime
+
+now = datetime.now()
 
 
 class Request:
@@ -209,11 +212,17 @@ class OutputHandler(BaseRequestHandler):
 
     def handle_request(self, req: Request) -> (str, bool):
         output = "\n"
+        request_count = 0
         for result in req.result:
             output += result.__str__() + "\n"
+            request_count += 1
+        print("Timestamp: " + now.strftime("%d/%m/%Y, %H:%M:%S"))
+        print("Number of requests = " + str(request_count))
         print(output)
         if req.output != "print":
             with open(req.output, mode="w", encoding='utf-8') as output_file:
+                output_file.write("Timestamp: " + now.strftime("%d/%m/%Y, %H:%M:%S"))
+                output_file.write("\nNumber of requests = " + str(request_count))
                 output_file.write(output)
 
         # Return the result of the next handler if there is one
